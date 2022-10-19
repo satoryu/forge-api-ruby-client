@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative "lib/autodesk/forege/version"
+require_relative "lib/autodesk/forge/version"
 
 Gem::Specification.new do |spec|
-  spec.name = "autodesk-forege"
-  spec.version = Autodesk::Forege::VERSION
+  spec.name = "autodesk-forge"
+  spec.version = Autodesk::Forge::VERSION
   spec.authors = ["Tatsuya Sato"]
   spec.email = ["satoryu.1981@gmail.com"]
 
@@ -31,6 +31,7 @@ Gem::Specification.new do |spec|
   # Uncomment to register a new dependency of your gem
   spec.add_development_dependency "rake", "~> 13.0"
   spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "webmock", "~> 3.18"
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

@@ -39,6 +39,18 @@ RSpec.describe Autodesk::Forge do
           expect(stub_authentication).to have_been_requested
         end
       end
+      context 'When getting error response' do
+        it 'raises an exception' do
+          stub_authentication = stub_request(:post, 'https://developer.api.autodesk.com/authentication/v1/authenticate')
+            .with(body: hash_including(client_id: 'dummy-client-id', client_secret: 'dummy-client-secret', grant_type: 'client_credentials'))
+            .to_return({ status: 400, body: { errorCode: 'AUTH-001', developerMessage: 'the client_id is not authorized', userMessage: '', 'more info' => 'https://developer.api.autodesk.com/documentation/v1/errors/AUTH-001'}.to_json })
+
+            forge = Autodesk::Forge.new(client_id: 'dummy-client-id', client_secret: 'dummy-client-secret', scope: 'data:read%20data:write')
+
+            expect { forge.authenticate }.to raise_error(Exception)
+            expect(stub_authentication).to have_been_requested
+        end
+      end
     end
   end
 end

@@ -23,6 +23,8 @@ module Autodesk
       body = params.map { |k, v| "#{k}=#{v}" }.join('&')
       response = http.post('/authentication/v1/authenticate', body)
 
+      raise 'error response' if response.code >= '400'
+
       JSON.parse(response.body)
     end
   end

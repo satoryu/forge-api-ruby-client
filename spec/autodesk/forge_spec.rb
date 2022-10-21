@@ -3,10 +3,15 @@
 RSpec.describe Autodesk::Forge do
   describe '.authenticate' do
     it 'responds credential' do
-      forge = Autodesk::Forge.new
+      stub_authentication = stub_request(:post, 'https://developer.api.autodesk.com/authentication/v1/authenticate')
+        .with(body: hash_including(client_id: 'dummy-client-id', client_secret: 'dummy-client-secret', grant_type: 'client_credentials'))
+        .to_return({ body: { access_token: 'dummy-access-token'}.to_json })
+
+      forge = Autodesk::Forge.new client_id: 'dummy-client-id', client_secret: 'dummy-client-secret'
       credential = forge.authenticate
 
-      expect(credential).to include(access_token: 'dummy-access-token')
+      expect(credential).to include('access_token' => 'dummy-access-token')
+      expect(stub_authentication).to have_been_requested
     end
   end
 end

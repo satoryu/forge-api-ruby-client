@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'webmock/rspec'
 require "autodesk/forge"
 
 RSpec.configure do |config|
@@ -11,5 +12,15 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  # Disable connection to reach the internet
+  config.before :suite do
+    WebMock.disable_net_connect!
+  end
+
+  # Remove all stubs created by WebMock
+  config.before :each do
+    WebMock.reset!
   end
 end

@@ -16,8 +16,10 @@ module Autodesk
     def authenticate
       http = Net::HTTP.new('developer.api.autodesk.com', 443)
       http.use_ssl = true
+      http.set_debug_output($stderr)
       params = { client_id: @client_id, client_secret: @client_secret, grant_type: 'client_credentials'}
-      params['scope'] = @scope if @scope
+
+      params[:scope] = (Array === @scope ? @scope.join('%20') : @scope) if @scope
 
       body = params.map { |k, v| "#{k}=#{v}" }.join('&')
       response = http.post('/authentication/v1/authenticate', body)

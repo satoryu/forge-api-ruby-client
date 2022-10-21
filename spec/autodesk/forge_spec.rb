@@ -25,6 +25,20 @@ RSpec.describe Autodesk::Forge do
         expect(credential).to include('access_token' => 'dummy-access-token')
         expect(stub_authentication).to have_been_requested
       end
+
+      context 'When giving two scopes' do
+        it 'sends the scope as a parameter concatinating URL encoded space' do
+          stub_authentication = stub_request(:post, 'https://developer.api.autodesk.com/authentication/v1/authenticate')
+            .with(body: hash_including(client_id: 'dummy-client-id', client_secret: 'dummy-client-secret', grant_type: 'client_credentials', scope: 'data:read data:write'))
+            .to_return({ body: { access_token: 'dummy-access-token'}.to_json })
+
+          forge = Autodesk::Forge.new(client_id: 'dummy-client-id', client_secret: 'dummy-client-secret', scope: 'data:read%20data:write')
+          credential = forge.authenticate
+
+          expect(credential).to include('access_token' => 'dummy-access-token')
+          expect(stub_authentication).to have_been_requested
+        end
+      end
     end
   end
 end

@@ -1,5 +1,6 @@
 require 'net/http'
 require 'json'
+require 'uri'
 
 module Autodesk
   class Forge
@@ -15,7 +16,7 @@ module Autodesk
           http.use_ssl = true
           headers = { Authorization: "Bearer #{@credentials['access_token']}"}
 
-          response = http.get("/data/v1/projects/#{@project_id}/folders/#{folder_id}", headers)
+          response = http.get("/data/v1/projects/#{@project_id}/folders/#{URI.encode_www_form_component(folder_id)}", headers)
 
           JSON.parse(response.body)
         end

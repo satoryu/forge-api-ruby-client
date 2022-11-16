@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'uri'
 
 RSpec.describe Autodesk::Forge::DataManagement::Folder do
-  describe '#list' do
+  describe '#get' do
     let(:project_id) { 'dummy-project-id'}
     let(:folder_id) { 'dummy-folder-id'}
 

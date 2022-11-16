@@ -3,6 +3,7 @@
 require_relative "forge/version"
 
 require_relative 'forge/data_management'
+require_relative 'forge/model_derivative'
 
 require 'net/http'
 require 'json'

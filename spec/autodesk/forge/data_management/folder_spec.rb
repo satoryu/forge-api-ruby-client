@@ -21,4 +21,23 @@ RSpec.describe Autodesk::Forge::DataManagement::Folder do
       expect(folder['data']).to be_eql('dummy-data')
     end
   end
+
+  describe '#contents' do
+    let(:project_id) { 'dummy-project-id'}
+    let(:folder_id) { 'dummy-folder-id'}
+
+    it 'sends a request to the endpoint' do
+      stub_hubs = stub_request(:get, "https://developer.api.autodesk.com/data/v1/projects/#{project_id}/folders/#{URI.encode_www_form_component(folder_id)}/contents")
+        .with(headers: { Authorization: 'Bearer dummy-access-token'})
+        .to_return({ body: { data: 'dummy-data' }.to_json })
+
+      credentials = { 'access_token' => 'dummy-access-token' }
+
+      folder = Autodesk::Forge::DataManagement::Folder.new(project_id: project_id, folder_id: folder_id, credentials: credentials)
+      contents = folder.contents
+
+      expect(stub_hubs).to have_been_requested
+      expect(contents['data']).to be_eql('dummy-data')
+    end
+  end
 end

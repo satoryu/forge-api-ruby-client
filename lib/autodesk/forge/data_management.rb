@@ -7,3 +7,4 @@ end
 
 require_relative 'data_management/folder'
 require_relative 'data_management/item'
+require_relative 'data_management/version'

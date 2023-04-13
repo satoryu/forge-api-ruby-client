@@ -20,6 +20,15 @@ module Autodesk
 
           http_client.get(path, headers)
         end
+
+        def post_request(path, body)
+          headers = { 
+            Authorization: "Bearer #{@credentials['access_token']}",
+            "Content-Type" => "application/json"
+          }
+          
+          http_client.post(path, body.to_json, headers)
+        end
     end
   end
 end

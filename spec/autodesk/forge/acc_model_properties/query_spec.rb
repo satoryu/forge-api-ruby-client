@@ -53,7 +53,7 @@ RSpec.describe Autodesk::Forge::AccModelProperties::Query do
     it 'sends a request to the endpoint' do
       stub_hubs = stub_request(:get, "https://developer.api.autodesk.com/construction/index/v2/projects/#{project_id}/indexes/#{index_id}/queries/#{query_id}/properties")
         .with(headers: { Authorization: 'Bearer dummy-access-token'})
-        .to_return({ body: "{ \"data\": \"dummy-data\" }\n{ \"data\": \"dummy-data\" }" })
+        .to_return({ body: { data: 'dummy-data' }.to_json })
 
       credentials = { 'access_token' => 'dummy-access-token' }
 
@@ -61,7 +61,7 @@ RSpec.describe Autodesk::Forge::AccModelProperties::Query do
       query = query.properties()
 
       expect(stub_hubs).to have_been_requested
-      expect(query['data'][0]['data']).to be_eql('dummy-data')
+      expect(query['data']).to be_eql('dummy-data')
     end
   end
 

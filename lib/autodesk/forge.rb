@@ -19,12 +19,18 @@ module Autodesk
     def authenticate
       http = Net::HTTP.new('developer.api.autodesk.com', 443)
       http.use_ssl = true
-      params = { client_id: @client_id, client_secret: @client_secret, grant_type: 'client_credentials'}
 
+      params = { grant_type: 'client_credentials'}
       params[:scope] = (Array === @scope ? @scope.join('%20') : @scope) if @scope
-
       body = params.map { |k, v| "#{k}=#{v}" }.join('&')
-      response = http.post('/authentication/v1/authenticate', body)
+
+      authorization = Base64.strict_encode64("#{@client_id}:#{@client_secret}")
+      headers = { 
+        Authorization: "Basic #{authorization}",
+        "Content-Type" => "application/x-www-form-urlencoded"
+      }
+
+      response = http.post('/authentication/v2/token', body, headers)
 
       raise 'error response' if response.code >= '400'
 

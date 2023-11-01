@@ -15,6 +15,12 @@ module Autodesk
 
           JSON.parse(response.body)
         end
+
+        def get
+          response = get_request("/data/v1/projects/#{@project_id}/items/#{URI.encode_www_form_component(@item_id)}")
+
+          JSON.parse(response.body)
+        end
       end
     end
   end

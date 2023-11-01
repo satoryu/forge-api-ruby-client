@@ -19,4 +19,23 @@ RSpec.describe Autodesk::Forge::DataManagement::Item do
       expect(versions['data']).to be_eql('dummy-data')
     end
   end
+
+  describe '#item' do
+    let(:project_id) { 'dummy-project-id'}
+    let(:item_id) { 'dummy-item-id'}
+
+    it 'sends a request to the endpoint' do
+      stub_hubs = stub_request(:get, "https://developer.api.autodesk.com/data/v1/projects/#{project_id}/items/#{URI.encode_www_form_component(item_id)}")
+        .with(headers: { Authorization: 'Bearer dummy-access-token'})
+        .to_return({ body: { data: 'dummy-data' }.to_json })
+
+      credentials = { 'access_token' => 'dummy-access-token' }
+
+      itemApi = Autodesk::Forge::DataManagement::Item.new(project_id: project_id, item_id: item_id, credentials: credentials)
+      item = itemApi.get
+
+      expect(stub_hubs).to have_been_requested
+      expect(item['data']).to be_eql('dummy-data')
+    end
+  end
 end
